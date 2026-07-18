@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { supabase } from '../lib/supabaseClient';
+import { supabase, supabaseConfigured } from '../lib/supabaseClient';
 
 const WINGS = ['Tech Solutions', 'Content Production', 'Backend & Operations'];
 const CATEGORIES_EXPENSE = ['Software', 'Contractor', 'Equipment', 'Salary', 'Marketing', 'Travel', 'Rent', 'Misc'];
@@ -371,6 +371,23 @@ export default function Page() {
   }
 
   // ---------- Render gates ----------
+  if (!supabaseConfigured) {
+    return (
+      <div className="nmyt-login-wrap">
+        <div className="nmyt-login-card">
+          <div className="mark">⚡</div>
+          <h1>Setup needed</h1>
+          <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 10 }}>
+            This app can&apos;t reach Supabase yet. In your Vercel project, go to
+            <strong> Settings → Environment Variables</strong> and make sure both
+            <code style={{ display: 'block', marginTop: 8, color: 'var(--gold-soft)' }}>NEXT_PUBLIC_SUPABASE_URL</code>
+            <code style={{ display: 'block', color: 'var(--gold-soft)' }}>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>
+            are set for the <strong>Production</strong> environment, then redeploy.
+          </p>
+        </div>
+      </div>
+    );
+  }
   if (session === undefined) {
     return <div className="nmyt-shell"><p style={{ color: 'var(--muted)' }}>Loading…</p></div>;
   }
